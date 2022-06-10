@@ -4,6 +4,7 @@
 		<title>First Web Application</title>
 	</head>
 	<body>
-		Welcome ${name}! <a href="/list-todos">Click here</a> to manage your TODOs.
+		Here are the list of your todos:<br>
+		${todos}
 	</body>
 </html>
