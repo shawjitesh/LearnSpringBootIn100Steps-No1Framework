@@ -1,5 +1,6 @@
 package com.example.springboot.web.springbootfirstwebapplication.controller;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 
 import javax.validation.Valid;
@@ -8,9 +9,12 @@ import com.example.springboot.web.springbootfirstwebapplication.model.Todo;
 import com.example.springboot.web.springbootfirstwebapplication.service.TodoService;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.propertyeditors.CustomDateEditor;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.WebDataBinder;
+import org.springframework.web.bind.annotation.InitBinder;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -22,6 +26,13 @@ public class TodoController {
 	
 	@Autowired
 	TodoService todoService;
+	
+	@InitBinder
+	public void initBinder(WebDataBinder dataBinder) {
+		SimpleDateFormat dateFormat = new SimpleDateFormat("dd/MM/yyyy");
+		dataBinder.registerCustomEditor(Date.class, new CustomDateEditor(
+				dateFormat, false));
+	}
 	
 	@RequestMapping(value = "/list-todos", method = RequestMethod.GET)
 	public String showTodos(ModelMap model) {
@@ -39,7 +50,7 @@ public class TodoController {
 	@RequestMapping(value = "/add-todo", method = RequestMethod.POST)
 	public String addTodo(ModelMap model, @Valid Todo todo, BindingResult bindingResult) {
 		if(bindingResult.hasErrors()) return "todo";
-		todoService.addTodo((String) model.get("name"), todo.getDesc(), new Date(), false);
+		todoService.addTodo((String) model.get("name"), todo.getDesc(), todo.getTargetDate(), false);
 		return "redirect:/list-todos";
 	}
 	
