@@ -1,4 +1,4 @@
-package com.example.springboot.service;
+package com.example.springboot.firstspringbootproject;
 
 import org.springframework.stereotype.Component;
 
